@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Fitiwebs Email Sender — manage permission-based email campaigns and delivery logs.">
+  <title>WhiteMail Sender</title><link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-icon">W</div><div><strong>WhiteMail</strong><small>SENDER</small></div></div>
+      <nav><a class="active" href="#dashboard">▦ <span>Dashboard</span></a><a href="#compose">✉ <span>Compose email</span></a><a href="#activity">◷ <span>Activity</span></a></nav>
+      <div class="sidebar-note"><span class="dot"></span> Delivery service <b>Connected by config</b><small>Provider limits still apply.</small></div>
+      <div class="sidebar-footer">Secure sending workspace<br><small>Consent-based email only</small></div>
+    </aside>
+    <main>
+      <header class="topbar"><div><p class="eyebrow">WORKSPACE / EMAIL</p><h1>Email dashboard</h1></div><div class="top-actions"><button id="accessBtn" class="btn secondary">Set access token</button><span class="pill"><span class="dot"></span> Protected sending</span><button id="refreshBtn" class="btn secondary">↻ Refresh</button></div></header>
+      <section class="stats" id="dashboard">
+        <article class="stat"><span>Sent today</span><strong id="sentCount">—</strong><small>Application-tracked sends</small></article>
+        <article class="stat"><span>Daily app limit</span><strong id="dailyLimit">1,000</strong><small>Provider cap may be lower</small></article>
+        <article class="stat"><span>Remaining app quota</span><strong id="remainingCount">—</strong><small>Resets on UTC day boundary</small></article>
+        <article class="stat"><span>Service status</span><strong class="status-text" id="serviceStatus">Checking</strong><small id="statusHint">Connecting to API</small></article>
+      </section>
+      <div class="notice"><strong>Deliverability note</strong><span>Inbox placement is never guaranteed. Authenticate your sender domain with SPF, DKIM and DMARC, send only to opted-in contacts, and honor unsubscribes.</span></div>
+      <section class="workspace" id="compose">
+        <div class="panel compose-panel">
+          <div class="panel-heading"><div><p class="eyebrow">NEW MESSAGE</p><h2>Compose email</h2></div><span class="tag">API powered</span></div>
+          <form id="emailForm">
+            <div class="import-row"><div><label for="csvFile">Import contacts (CSV)</label><input id="csvFile" type="file" accept=".csv,text/csv"><small>CSV must contain an email column or a list of email addresses.</small></div><button type="button" class="btn secondary" id="importBtn">Import CSV</button></div>
+            <label for="fromName">Sender name</label><input id="fromName" maxlength="100" placeholder="Fitiwebs" required>
+            <label for="fromEmail">Verified sender email</label><input id="fromEmail" type="email" placeholder="hello@yourdomain.com" required>
+            <label for="recipients">Recipients <small>One email per line or comma-separated. Send only to people who agreed to receive email.</small></label>
+            <textarea id="recipients" rows="5" placeholder="customer@example.com&#10;another@example.com" required></textarea>
+            <div class="field-row"><div><label for="subject">Subject</label><input id="subject" maxlength="180" placeholder="Your update from Fitiwebs" required></div><div><label for="replyTo">Reply-to (optional)</label><input id="replyTo" type="email" placeholder="support@yourdomain.com"></div></div>
+            <label for="scheduleAt">Schedule send (optional)</label><input id="scheduleAt" type="datetime-local"><p class="form-hint">Leave blank to send now. Scheduled sends require the queue worker to run on your deployment plan.</p>
+            <label for="message">Email message</label><textarea id="message" rows="8" maxlength="20000" placeholder="Write your message here…" required></textarea>
+            <div class="consent"><input type="checkbox" id="permission" required><label for="permission">I confirm these recipients have consented to receive this email, and this message includes a valid way to unsubscribe where required.</label></div>
+            <div class="form-footer"><span id="recipientCount">0 recipients detected</span><button class="btn primary" type="submit" id="sendBtn">Send email <span>→</span></button></div>
+            <p class="form-hint">For safer rollout, test with your own address first. Each recipient counts toward your provider's quota.</p>
+          </form>
+        </div>
+        <aside class="panel side-panel">
+          <p class="eyebrow">SENDING CHECKLIST</p><h2>Before you launch</h2>
+          <div class="check-item"><span class="check">✓</span><div><b>Verify your domain</b><p>Publish provider-supplied SPF/DKIM records; add DMARC.</p></div></div>
+          <div class="check-item"><span class="check">✓</span><div><b>Use permission-based lists</b><p>Never use purchased, scraped, or harvested email lists.</p></div></div>
+          <div class="check-item"><span class="check">✓</span><div><b>Keep list hygiene</b><p>Remove hard bounces, complaints, and unsubscribed contacts.</p></div></div>
+          <div class="check-item"><span class="check">✓</span><div><b>Know the real limit</b><p>The app cap does not override your email provider's plan or account approval.</p></div></div>
+          <div class="quota-card"><span>Current app quota</span><strong id="quotaSummary">Loading…</strong><small>Actual delivery can be lower because of provider limits, invalid addresses, or recipient servers.</small></div>
+        </aside>
+      </section>
+      <section class="panel activity-panel" id="activity">
+        <div class="panel-heading"><div><p class="eyebrow">RECENT EVENTS</p><h2>Sending activity</h2></div><span class="tag" id="activityCount">Latest 20</span></div>
+        <div class="table-wrap"><table><thead><tr><th>Recipient</th><th>Subject</th><th>Status</th><th>Time (UTC)</th></tr></thead><tbody id="activityRows"><tr><td colspan="4" class="empty">Loading activity…</td></tr></tbody></table></div>
+      </section>
+      <footer>© <span id="year"></span> WhiteMail Sender <span>Built for responsible email delivery.</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body></html>

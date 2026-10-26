@@ -1,0 +1,8 @@
+{
+  "name": "fitiwebs-mail-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Consent-based email sender using Vercel serverless functions, Brevo API and Supabase",
+  "engines": {"node": ">=20"},
+  "dependencies": {"@supabase/supabase-js": "^2.57.0"}
+}
